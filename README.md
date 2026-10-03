@@ -14,6 +14,15 @@ A simple decentralized voting DApp. Administrators register voters and candidate
 
 React frontend → ethers.js v6 → MetaMask → `Voting.sol` on Ethereum Sepolia.
 
+```mermaid
+flowchart LR
+    U[User] --> F[React + Vite Frontend]
+    F --> E[ethers.js v6]
+    E --> M[MetaMask]
+    M --> S[Ethereum Sepolia]
+    S --> C[Voting.sol]
+```
+
 ## Tech stack
 
 - React, Vite, JavaScript, CSS
