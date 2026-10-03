@@ -15,12 +15,45 @@ A simple decentralized voting DApp. Administrators register voters and candidate
 React frontend → ethers.js v6 → MetaMask → `Voting.sol` on Ethereum Sepolia.
 
 ```mermaid
-flowchart LR
-    U[User] --> F[React + Vite Frontend]
-    F --> E[ethers.js v6]
-    E --> M[MetaMask]
-    M --> S[Ethereum Sepolia]
-    S --> C[Voting.sol]
+flowchart TB
+    User([Admin or Voter])
+
+    subgraph Client[Browser Client]
+        UI[React + Vite UI]
+        Wallet[MetaMask]
+        Ethers[ethers.js v6]
+        Config[Contract config<br/>Sepolia address + ABI]
+        UI --> Ethers
+        Config --> Ethers
+        Ethers <--> Wallet
+    end
+
+    subgraph Sepolia[Ethereum Sepolia]
+        Contract[Voting.sol]
+        State[(Contract state)]
+        Contract --> State
+    end
+
+    subgraph Development[Development and Deployment]
+        Tests[Hardhat tests]
+        Compile[Solidity compiler]
+        Deploy[Hardhat deployment script]
+        Env[.env<br/>RPC URL + deployment key]
+        Tests --> Compile --> Deploy
+        Env --> Deploy
+    end
+
+    User --> UI
+    Wallet -->|signed transactions| Contract
+    Contract -->|read operations| Ethers
+    Deploy -->|deploys| Contract
+
+    classDef client fill:#e8f0fe,stroke:#2563eb,color:#172554;
+    classDef chain fill:#ecfdf5,stroke:#059669,color:#064e3b;
+    classDef dev fill:#fff7ed,stroke:#ea580c,color:#7c2d12;
+    class UI,Wallet,Ethers,Config client;
+    class Contract,State chain;
+    class Tests,Compile,Deploy,Env dev;
 ```
 
 ## Tech stack
